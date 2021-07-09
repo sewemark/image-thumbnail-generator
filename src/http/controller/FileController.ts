@@ -19,7 +19,7 @@ export class FileController {
 
     public async post(req: FileUploadRequest, res: Response): Promise<void> {
         try {
-            this.logger.info('FileController', 'post', `Uploading  file ${req.fileMetadata.originalName}`);
+            this.logger.info('FileController', 'post', `Uploading file ${req.fileMetadata.originalName}`);
             await this.fileHandler.generateThumbnails(req.fileMetadata.originalName);
             this.responseFactory.redirectToPage(res, Pages.Index);
         } catch (err) {

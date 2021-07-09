@@ -4,9 +4,11 @@ import { FileNotFoundError } from '../errors/FileNotFoundError';
 import { IFileControllerAdapter } from '../http/adapters/FileControllerAdapter';
 import { ILogger } from '../logger/ILogger';
 import { Types } from '../Types';
+import { ALLOWED_IMAGE_TYPES, IAllowedImageType } from './AlloweImageTypes';
 import { IFileStream } from './IFileStream';
 import { IFileStorage } from './IReadableFileStorage';
 import { IThumbnailGenerator } from './IThumbnailGenerator';
+import { THUMBNAIL_EXTENSION } from "./SharpThumbnailGenerator";
 
 @injectable()
 export class FileHandler implements IFileControllerAdapter {
@@ -25,7 +27,8 @@ export class FileHandler implements IFileControllerAdapter {
         return {
             stream,
             fileName,
-            mimeType: 'image/jpg',
+            mimeType: ALLOWED_IMAGE_TYPES.find((allowedType: IAllowedImageType) => allowedType.extension === path.parse(fileName).ext)?.mimeType
+                ?? '',
         };
     }
 
@@ -37,9 +40,15 @@ export class FileHandler implements IFileControllerAdapter {
         const sizes = [200, 300, 400];
         const promises = sizes.map(async (size: number) => {
             const parsedFileName = path.parse(fileName);
-            const thumbnailFileName = `${parsedFileName.name}.name_${size}_x${size}.${parsedFileName.ext}`;
+            const thumbnailFileName = `${parsedFileName.name}.name_${size}_x${size}.${THUMBNAIL_EXTENSION}`;
             const writeFileStream = await this.fileStorage.getWriteStream(thumbnailFileName);
-            await this.thumbnailGenerator.generate(readFileStream, writeFileStream, {width: size, height: size});
+            await this.thumbnailGenerator.generate(
+                readFileStream,
+                writeFileStream, {
+                    width: size,
+                    height: size,
+                    originalFileName: fileName,
+                });
         });
         await Promise.all(promises);
     }

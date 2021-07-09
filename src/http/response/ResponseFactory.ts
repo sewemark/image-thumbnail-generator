@@ -4,6 +4,7 @@ import multer from 'multer';
 import * as path from 'path';
 import { FileNotFoundError } from '../../errors/FileNotFoundError';
 import { InvalidImageError } from '../../errors/InvalidImageError';
+import { NoFileUploadedError } from '../../errors/NoFileUploadedError';
 import { ILogger } from '../../logger/ILogger';
 import { Pages } from '../../pages/Pages';
 import { ALLOWED_IMAGE_TYPES, IAllowedImageType } from '../../services/AlloweImageTypes';
@@ -26,6 +27,9 @@ export class ResponseFactory implements IResponseFactory {
                 break;
             case FileNotFoundError:
                 res.status(404).send('File not found');
+                break;
+            case NoFileUploadedError:
+                res.status(400).send('No file uploaded');
                 break;
             default:
                 res.status(500).send('Internal server error');

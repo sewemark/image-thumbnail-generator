@@ -6,6 +6,8 @@ import { Types } from '../Types';
 import { IThumbnailGenerator } from './IThumbnailGenerator';
 import { IThumbnailOptions } from './IThumbnailOptions';
 
+export const THUMBNAIL_EXTENSION = 'png';
+
 @injectable()
 export class SharpThumbnailGenerator implements IThumbnailGenerator {
     constructor(

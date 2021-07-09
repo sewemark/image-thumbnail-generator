@@ -8,6 +8,7 @@
     "watch-node": "nodemon dist/index.js",
     "watch-ts": "tsc -w",
     "server": "node dist/index.js",
+    "build": "tsc",
     "integration-tests": "mocha -r ts-node/register integrationTests/Movies.spec.js",
     "unit-tests": "mocha -r ts-node/register unitTests/*.spec.ts",
     "lint": "tslint src/**/*.{ts,tsx}"

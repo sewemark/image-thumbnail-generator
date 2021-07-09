@@ -24,8 +24,10 @@ export class YamlConfigProvider implements IConfigProvider {
 
     public import(filePath: string, fileName?: string): Promise<ServerConfig> {
         const file = fileName ? fileName : CONFIG_FILENAME;
-        if(!fs.existsSync(path.join(filePath, file))) {
+        if (!fs.existsSync(path.join(filePath, file))) {
             this.export(new ServerConfig(this.logger));
+            this.logger.warn('YamlConfigProvider', 'import', 'New config file generated, adjust your configuration!!!!');
+            process.exit(0);
         }
         const config = yaml.safeLoad(fs.readFileSync(path.join(filePath, file), 'utf-8'));
         const serverConfig = new ServerConfig(this.logger);

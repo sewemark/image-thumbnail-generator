@@ -3,6 +3,7 @@ import { Response } from 'express-serve-static-core';
 import { inject, injectable } from 'inversify';
 import { ServerConfig } from '../../config/ServerConfig';
 import { ILogger } from '../../logger/ILogger';
+import { Pages } from '../../pages/Pages';
 import { IFileUploadService } from '../../services/IFileUploadService';
 import { Types } from '../../Types';
 import { FileUploadRequest } from '../request/FileUploadRequest';
@@ -23,11 +24,15 @@ export class FileUploadMiddleware implements IMiddleware {
         this.logger.info('FileUploadMiddleware', 'handle', 'Request with file');
         try {
             this.uploadService.single('file')(req, res, (err: Error) => {
-                if(err) {
+                if (err) {
                     this.logger.error('FileUploadMiddleware', 'handle', err, `Cannot upload file - ${err?.message}`);
                     this.responseFactory.sendErrorResponse(res, err);
                 } else {
                     const file = req.file;
+                    if (!file) {
+                        this.responseFactory.renderPage(res, Pages.ServerError, { errorMessage: 'No file uploaded'});
+                        return;
+                    }
                     this.logger.info('FileUploadMiddleware', 'handle', `File has been uploaded ${file.originalname} `);
                     req.fileMetadata = {
                         name: file.filename,

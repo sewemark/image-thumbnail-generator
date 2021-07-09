@@ -1,12 +1,7 @@
 import { Request } from 'express';
+import { IFileMetadata } from './IFileMetadata';
 
-export interface IFileMetadata {
-    name: string;
-    mimeType: string;
-    size: number;
-    originalName: string;
-}
-
+// tslint:disable-next-line:interface-name
 export interface FileUploadRequest extends Request {
     fileMetadata: IFileMetadata;
 }

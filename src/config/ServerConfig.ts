@@ -5,29 +5,29 @@ import { StorageConfig } from './StorageConfig';
 
 @injectable()
 export class ServerConfig {
-    private logger: ILogger;
-
-    constructor(@inject(Types.Logger) logger: ILogger) {
-        this.logger = logger;
-        this._storageConfig = new StorageConfig(logger);
-    }
-
-    private _port: number = 8082;
 
     public get port(): number {
         return this._port;
     }
 
-    private _apiPath: string = 'http://localhost:8082';
-
     public get apiPath(): string {
         return this._apiPath;
     }
 
-    private _storageConfig: StorageConfig;
-
     public get storageConfig(): StorageConfig {
         return this._storageConfig;
+    }
+    private logger: ILogger;
+
+    private _port: number = 8082;
+
+    private _apiPath: string = 'http://localhost:8082';
+
+    private _storageConfig: StorageConfig;
+
+    constructor(@inject(Types.Logger) logger: ILogger) {
+        this.logger = logger;
+        this._storageConfig = new StorageConfig(logger);
     }
 
     public serialize(): any {
@@ -39,7 +39,7 @@ export class ServerConfig {
     }
 
     public deserialize(config: any): void {
-        if(config.port && Number.isInteger(config.port) && Number(config.port) < Number.MAX_SAFE_INTEGER) {
+        if (config.port && Number.isInteger(config.port) && Number(config.port) < Number.MAX_SAFE_INTEGER) {
             this._port = config.port;
         } else {
             this.logger.info(
@@ -49,13 +49,13 @@ export class ServerConfig {
             );
         }
 
-        if(typeof config.apiPath === 'string') {
+        if (typeof config.apiPath === 'string') {
             this._apiPath = config.apiPath;
         } else {
             this.logger.info(
                 'StorageConfig',
                 'deserialize',
-                `Invalid api path path ${config.apiPath}, using default value`,
+                `Invalid api path path ${config.apiPath}, using default value ${this.apiPath}`,
             );
         }
 

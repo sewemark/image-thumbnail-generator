@@ -27,7 +27,7 @@ export class LocalFileUploadService implements IFileUploadService {
             },
         });
         const fileFilter = (req: Request, file: any, callback: any): void => {
-            if(ALLOWED_IMAGE_TYPES.find((allowedType: IAllowedImageType) => allowedType.mimeType === file.mimetype)) {
+            if (ALLOWED_IMAGE_TYPES.find((allowedType: IAllowedImageType) => allowedType.mimeType === file.mimetype)) {
                 callback(null, true);
             } else {
                 callback(new InvalidImageError(`Got MIMETYPE: ${file?.mimetype} `), false);

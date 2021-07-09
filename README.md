@@ -1,1 +1,5 @@
-Node.js starter project with TypeScript, YAML config, and pino logger
+#Installation:
+* yarn install
+* yarn start -> first run generates config file
+* adjust config.yml file 
+* yarn start
