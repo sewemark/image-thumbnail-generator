@@ -1,30 +1,33 @@
 import { inject, injectable } from 'inversify';
 import { ILogger } from '../logger/ILogger';
-import {Types} from '../Types';
-import {StorageConfig} from './StorageConfig';
+import { Types } from '../Types';
+import { StorageConfig } from './StorageConfig';
 
 @injectable()
 export class ServerConfig {
-    private _port: number = 8082;
-    private _apiPath: string = 'http://localhost:8082';
     private logger: ILogger;
-    private _storageConfig: StorageConfig;
+
+    constructor(@inject(Types.Logger) logger: ILogger) {
+        this.logger = logger;
+        this._storageConfig = new StorageConfig(logger);
+    }
+
+    private _port: number = 8082;
 
     public get port(): number {
         return this._port;
     }
 
+    private _apiPath: string = 'http://localhost:8082';
+
     public get apiPath(): string {
         return this._apiPath;
     }
 
+    private _storageConfig: StorageConfig;
+
     public get storageConfig(): StorageConfig {
         return this._storageConfig;
-    }
-
-    constructor(@inject(Types.Logger) logger: ILogger) {
-        this.logger = logger;
-        this._storageConfig = new StorageConfig(logger);
     }
 
     public serialize(): any {
@@ -36,7 +39,7 @@ export class ServerConfig {
     }
 
     public deserialize(config: any): void {
-        if (config.port && Number.isInteger(config.port) && Number(config.port) < Number.MAX_SAFE_INTEGER) {
+        if(config.port && Number.isInteger(config.port) && Number(config.port) < Number.MAX_SAFE_INTEGER) {
             this._port = config.port;
         } else {
             this.logger.info(
@@ -46,7 +49,7 @@ export class ServerConfig {
             );
         }
 
-        if (typeof config.apiPath === 'string' ) {
+        if(typeof config.apiPath === 'string') {
             this._apiPath = config.apiPath;
         } else {
             this.logger.info(

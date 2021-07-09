@@ -1,12 +1,12 @@
 import { NextFunction } from 'express';
 import { Response } from 'express-serve-static-core';
 import { inject, injectable } from 'inversify';
-import {ServerConfig} from '../../config/ServerConfig';
-import {ILogger} from '../../logger/ILogger';
-import {IFileUploadService} from '../../services/IFileUploadService';
-import {Types} from '../../Types';
-import {FileUploadRequest} from '../request/FileUploadRequest';
-import {IResponseFactory} from '../response/IResponseFactory';
+import { ServerConfig } from '../../config/ServerConfig';
+import { ILogger } from '../../logger/ILogger';
+import { IFileUploadService } from '../../services/IFileUploadService';
+import { Types } from '../../Types';
+import { FileUploadRequest } from '../request/FileUploadRequest';
+import { IResponseFactory } from '../response/IResponseFactory';
 import { IMiddleware } from './IMiddleware';
 
 @injectable()
@@ -23,7 +23,7 @@ export class FileUploadMiddleware implements IMiddleware {
         this.logger.info('FileUploadMiddleware', 'handle', 'Request with file');
         try {
             this.uploadService.single('file')(req, res, (err: Error) => {
-                if (err) {
+                if(err) {
                     this.logger.error('FileUploadMiddleware', 'handle', err, `Cannot upload file - ${err?.message}`);
                     this.responseFactory.sendErrorResponse(res, err);
                 } else {

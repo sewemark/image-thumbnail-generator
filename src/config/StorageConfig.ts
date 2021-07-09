@@ -1,18 +1,19 @@
 import * as fsExtra from 'fs-extra';
-import {ILogger} from '../logger/ILogger';
-import {StorageTypes} from './StoragTypes';
+import { ILogger } from '../logger/ILogger';
+import { StorageTypes } from './StoragTypes';
 
 export class StorageConfig {
     public type: StorageTypes = StorageTypes.Local;
-    private _storagePath: string = './tmpDir';
     private logger: ILogger;
-
-    public get storagePath(): string {
-        return this._storagePath;
-    }
 
     constructor(logger: ILogger) {
         this.logger = logger;
+    }
+
+    private _storagePath: string = './tmpDir';
+
+    public get storagePath(): string {
+        return this._storagePath;
     }
 
     public serialize(): any {
@@ -23,10 +24,10 @@ export class StorageConfig {
 
     public deserialize(config: any): void {
         console.log(config);
-        if (!fsExtra.existsSync(config.storagePath)) {
+        if(!fsExtra.existsSync(config.storagePath)) {
             fsExtra.mkdirpSync(config.storagePath);
         }
-        if (typeof config.storagePath === 'string' ) {
+        if(typeof config.storagePath === 'string') {
             this._storagePath = config.storagePath;
         } else {
             this.logger.info(

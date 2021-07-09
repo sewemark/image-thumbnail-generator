@@ -1,13 +1,13 @@
-import {ReadStream, WriteStream} from 'fs-extra';
 import * as fsExtra from 'fs-extra';
-import {inject, injectable} from 'inversify';
+import { ReadStream, WriteStream } from 'fs-extra';
+import { inject, injectable } from 'inversify';
 import * as path from 'path';
-import {ServerConfig} from '../config/ServerConfig';
-import {FileLink} from '../http/adapters/IIndexPageData';
-import {ILogger} from '../logger/ILogger';
-import {Types} from '../Types';
-import {ILinksFactory} from './ILinksFactory';
-import {IFileStorage} from './IReadableFileStorage';
+import { ServerConfig } from '../config/ServerConfig';
+import { FileLink } from '../http/adapters/IIndexPageData';
+import { ILogger } from '../logger/ILogger';
+import { Types } from '../Types';
+import { ILinksFactory } from './ILinksFactory';
+import { IFileStorage } from './IReadableFileStorage';
 
 @injectable()
 export class LocalReadableFileStorage implements IFileStorage {
@@ -17,6 +17,7 @@ export class LocalReadableFileStorage implements IFileStorage {
         @inject(Types.LinksFactory) protected linksFactory: ILinksFactory,
     ) {
     }
+
     public getReadStream(fileName: string): Promise<ReadStream> {
         const filePath = path.join(this.serverConfig.storageConfig.storagePath, fileName);
         return Promise.resolve(fsExtra.createReadStream(filePath));

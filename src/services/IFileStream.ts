@@ -1,4 +1,4 @@
-import {ReadStream} from 'fs-extra';
+import { ReadStream } from 'fs-extra';
 
 export interface IFileStream {
     stream: ReadStream;

@@ -9,6 +9,7 @@ const CONFIG_FILENAME = 'config.yml';
 
 export class YamlConfigProvider implements IConfigProvider {
     private logger: ILogger;
+
     constructor(
         logger: ILogger,
     ) {
@@ -23,7 +24,7 @@ export class YamlConfigProvider implements IConfigProvider {
 
     public import(filePath: string, fileName?: string): Promise<ServerConfig> {
         const file = fileName ? fileName : CONFIG_FILENAME;
-        if (!fs.existsSync(path.join(filePath, file))) {
+        if(!fs.existsSync(path.join(filePath, file))) {
             this.export(new ServerConfig(this.logger));
         }
         const config = yaml.safeLoad(fs.readFileSync(path.join(filePath, file), 'utf-8'));

@@ -1,5 +1,5 @@
-import {ReadStream, WriteStream} from 'fs-extra';
-import {FileLink} from '../http/adapters/IIndexPageData';
+import { ReadStream, WriteStream } from 'fs-extra';
+import { FileLink } from '../http/adapters/IIndexPageData';
 
 export interface IReadableFileStorage {
     getReadStream(fileName: string): Promise<ReadStream>;

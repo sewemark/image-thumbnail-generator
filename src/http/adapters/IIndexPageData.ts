@@ -1,4 +1,3 @@
-
 // tslint:disable-next-line:interface-name
 export interface FileLink {
     href: string;

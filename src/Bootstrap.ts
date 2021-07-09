@@ -1,20 +1,20 @@
 import { Container } from 'inversify';
-import {ServerConfig} from './config/ServerConfig';
-import {FileController} from './http/controller/FileController';
-import {PageController} from './http/controller/PageController';
-import {FileUploadMiddleware} from './http/middleware/FileUploadMiddleware';
-import {IMiddleware} from './http/middleware/IMiddleware';
-import {ResponseFactory} from './http/response/ResponseFactory';
+import { ServerConfig } from './config/ServerConfig';
+import { FileController } from './http/controller/FileController';
+import { PageController } from './http/controller/PageController';
+import { FileUploadMiddleware } from './http/middleware/FileUploadMiddleware';
+import { IMiddleware } from './http/middleware/IMiddleware';
+import { ResponseFactory } from './http/response/ResponseFactory';
 import { ILogger } from './logger/ILogger';
 import { Logger } from './logger/Logger';
-import {FileHandler} from './services/FileHandler';
-import {IFileUploadService} from './services/IFileUploadService';
-import {LinksFactory} from './services/LinksFactory';
-import {LocalFileUploadService} from './services/LocalFileUploadService';
-import {LocalReadableFileStorage} from './services/LocalReadableFileStorage';
-import {PageHandler} from './services/PageHandler';
-import {SharpThumbnailGenerator} from './services/SharpThumbnailGenerator';
-import {ControllerAdapters, Controllers, ControllerType, Middlewares, MiddlewareType, Types} from './Types';
+import { FileHandler } from './services/FileHandler';
+import { IFileUploadService } from './services/IFileUploadService';
+import { LinksFactory } from './services/LinksFactory';
+import { LocalFileUploadService } from './services/LocalFileUploadService';
+import { LocalReadableFileStorage } from './services/LocalReadableFileStorage';
+import { PageHandler } from './services/PageHandler';
+import { SharpThumbnailGenerator } from './services/SharpThumbnailGenerator';
+import { ControllerAdapters, Controllers, ControllerType, Middlewares, MiddlewareType, Types } from './Types';
 
 export function initContainer(logger: ILogger, config: ServerConfig): Container {
     const container = new Container();
@@ -43,10 +43,10 @@ function registerControllers(logger: ILogger, container: Container): void {
     container.bind(Types.ControllerFactory).toFactory((ctx): any =>
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (controllerType: ControllerType, method: string): any => {
-            if (ctx.container.isBound(controllerType)) {
+            if(ctx.container.isBound(controllerType)) {
                 const controller = ctx.container.get(controllerType);
                 // @ts-ignore
-                if (controller && controller[method] && typeof controller[method] === 'function') {
+                if(controller && controller[method] && typeof controller[method] === 'function') {
                     // @ts-ignore
                     return controller[method].bind(controller);
                 }
@@ -61,11 +61,12 @@ function registerControllers(logger: ILogger, container: Container): void {
             };
         });
 }
+
 function registerMiddlewares(logger: ILogger, container: Container): void {
     container.bind(Types.MiddlewareFactory).toFactory((ctx): any =>
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (middlewareType: MiddlewareType): any => {
-            if (ctx.container.isBound(middlewareType)) {
+            if(ctx.container.isBound(middlewareType)) {
                 const middleware = ctx.container.get<IMiddleware>(middlewareType);
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
                 return middleware.handle.bind(middleware);
@@ -75,7 +76,7 @@ function registerMiddlewares(logger: ILogger, container: Container): void {
                     'Middleware',
                     'handle',
                     new Error('Invalid middleware type'), `Middleware ${middlewareType.toString()} not found.`,
-                    );
+                );
             };
         });
     container.bind(Middlewares.FileUploadMiddleware).to(FileUploadMiddleware);

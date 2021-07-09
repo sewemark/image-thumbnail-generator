@@ -1,12 +1,12 @@
-import {inject, injectable} from 'inversify';
+import { inject, injectable } from 'inversify';
 import * as path from 'path';
-import {FileNotFoundError} from '../errors/FileNotFoundError';
-import {IFileControllerAdapter} from '../http/adapters/FileControllerAdapter';
-import {ILogger} from '../logger/ILogger';
-import { Types} from '../Types';
-import {IFileStream} from './IFileStream';
-import {IFileStorage} from './IReadableFileStorage';
-import {IThumbnailGenerator} from './IThumbnailGenerator';
+import { FileNotFoundError } from '../errors/FileNotFoundError';
+import { IFileControllerAdapter } from '../http/adapters/FileControllerAdapter';
+import { ILogger } from '../logger/ILogger';
+import { Types } from '../Types';
+import { IFileStream } from './IFileStream';
+import { IFileStorage } from './IReadableFileStorage';
+import { IThumbnailGenerator } from './IThumbnailGenerator';
 
 @injectable()
 export class FileHandler implements IFileControllerAdapter {
@@ -19,7 +19,7 @@ export class FileHandler implements IFileControllerAdapter {
 
     public async getFileStream(fileName: string): Promise<IFileStream> {
         const stream = await this.fileStorage.getReadStream(fileName);
-        if (!stream) {
+        if(!stream) {
             throw new FileNotFoundError(`File with ${fileName} was not found`);
         }
         return {
@@ -31,7 +31,7 @@ export class FileHandler implements IFileControllerAdapter {
 
     public async generateThumbnails(fileName: string): Promise<void> {
         const readFileStream = await this.fileStorage.getReadStream(fileName);
-        if (!readFileStream) {
+        if(!readFileStream) {
             throw new FileNotFoundError(`File with ${fileName} was not found, cannot generate thumbnails`);
         }
         const sizes = [200, 300, 400];

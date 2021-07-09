@@ -1,10 +1,10 @@
 import { ReadStream, WriteStream } from 'fs-extra';
-import {inject, injectable} from 'inversify';
+import { inject, injectable } from 'inversify';
 import sharp from 'sharp';
-import {ILogger} from '../logger/ILogger';
-import {Types} from '../Types';
-import {IThumbnailGenerator} from './IThumbnailGenerator';
-import {IThumbnailOptions} from './IThumbnailOptions';
+import { ILogger } from '../logger/ILogger';
+import { Types } from '../Types';
+import { IThumbnailGenerator } from './IThumbnailGenerator';
+import { IThumbnailOptions } from './IThumbnailOptions';
 
 @injectable()
 export class SharpThumbnailGenerator implements IThumbnailGenerator {

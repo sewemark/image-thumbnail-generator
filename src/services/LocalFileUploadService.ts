@@ -1,12 +1,12 @@
 import { Request, Response } from 'express-serve-static-core';
 import { inject, injectable } from 'inversify';
 import multer from 'multer';
-import {ServerConfig} from '../config/ServerConfig';
-import {InvalidImageError} from '../errors/InvalidImageError';
-import {ILogger} from '../logger/ILogger';
-import {Types} from '../Types';
-import {ALLOWED_IMAGE_TYPES, IAllowedImageType} from './AlloweImageTypes';
-import {IFileUploadService} from './IFileUploadService';
+import { ServerConfig } from '../config/ServerConfig';
+import { InvalidImageError } from '../errors/InvalidImageError';
+import { ILogger } from '../logger/ILogger';
+import { Types } from '../Types';
+import { ALLOWED_IMAGE_TYPES, IAllowedImageType } from './AlloweImageTypes';
+import { IFileUploadService } from './IFileUploadService';
 
 export const FILE_SIZE_LIMIT = 20 * 1024 * 1024;
 
@@ -27,7 +27,7 @@ export class LocalFileUploadService implements IFileUploadService {
             },
         });
         const fileFilter = (req: Request, file: any, callback: any): void => {
-            if (ALLOWED_IMAGE_TYPES.find((allowedType: IAllowedImageType) => allowedType.mimeType === file.mimetype)) {
+            if(ALLOWED_IMAGE_TYPES.find((allowedType: IAllowedImageType) => allowedType.mimeType === file.mimetype)) {
                 callback(null, true);
             } else {
                 callback(new InvalidImageError(`Got MIMETYPE: ${file?.mimetype} `), false);
@@ -36,7 +36,7 @@ export class LocalFileUploadService implements IFileUploadService {
         const limits = {
             fileSize: FILE_SIZE_LIMIT,
         };
-        this.upload = multer({ storage, fileFilter, limits  });
+        this.upload = multer({storage, fileFilter, limits});
     }
 
     public single(filename: string): (req: Request, res: Response, callback: any) => any {

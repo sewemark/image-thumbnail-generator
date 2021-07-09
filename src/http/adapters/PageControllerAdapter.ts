@@ -1,4 +1,4 @@
-import {IIndexPageData} from './IIndexPageData';
+import { IIndexPageData } from './IIndexPageData';
 
 export interface IPageControllerAdapter {
     getIndexData(): Promise<IIndexPageData>;

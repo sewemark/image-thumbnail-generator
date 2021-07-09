@@ -4,7 +4,7 @@ import { initContainer } from './Bootstrap';
 import { YamlConfigProvider } from './config/YamlConfigProvider';
 import { ILogger } from './logger/ILogger';
 import { Logger } from './logger/Logger';
-import {Types} from './Types';
+import { Types } from './Types';
 import { ExpressAppDecorator } from './ExpressAppDecorator';
 
 (async () => {

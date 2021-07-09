@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
-import  urljoin from 'url-join';
-import {ServerConfig} from '../config/ServerConfig';
-import {ILogger} from '../logger/ILogger';
-import {Types} from '../Types';
-import {ILinksFactory} from './ILinksFactory';
+import urljoin from 'url-join';
+import { ServerConfig } from '../config/ServerConfig';
+import { ILogger } from '../logger/ILogger';
+import { Types } from '../Types';
+import { ILinksFactory } from './ILinksFactory';
 
 @injectable()
 export class LinksFactory implements ILinksFactory {

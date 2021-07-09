@@ -3,7 +3,8 @@ import { Express } from 'express';
 import * as http from 'http';
 import { ServerConfig } from './config/ServerConfig';
 import { ILogger } from './logger/ILogger';
-const { createTerminus } = require('@godaddy/terminus')
+
+const {createTerminus} = require('@godaddy/terminus')
 
 export class ExpressAppDecorator implements IExpressAppDecorator {
     private logger: ILogger;
@@ -24,7 +25,7 @@ export class ExpressAppDecorator implements IExpressAppDecorator {
         });
         createTerminus(server, {
             signal: 'SIGINT',
-            healthChecks: { '/healthcheck': this.onHealthCheck.bind(this) },
+            healthChecks: {'/healthcheck': this.onHealthCheck.bind(this)},
             onSignal: this.onSignal.bind(this),
         });
     }

@@ -1,15 +1,15 @@
-import {Response} from 'express-serve-static-core';
-import {inject, injectable} from 'inversify';
+import { Response } from 'express-serve-static-core';
+import { inject, injectable } from 'inversify';
 import multer from 'multer';
 import * as path from 'path';
-import {FileNotFoundError} from '../../errors/FileNotFoundError';
-import {InvalidImageError} from '../../errors/InvalidImageError';
-import {ILogger} from '../../logger/ILogger';
-import {Pages} from '../../pages/Pages';
-import {ALLOWED_IMAGE_TYPES, IAllowedImageType} from '../../services/AlloweImageTypes';
-import {IFileStream} from '../../services/IFileStream';
-import {Types} from '../../Types';
-import {IResponseFactory} from './IResponseFactory';
+import { FileNotFoundError } from '../../errors/FileNotFoundError';
+import { InvalidImageError } from '../../errors/InvalidImageError';
+import { ILogger } from '../../logger/ILogger';
+import { Pages } from '../../pages/Pages';
+import { ALLOWED_IMAGE_TYPES, IAllowedImageType } from '../../services/AlloweImageTypes';
+import { IFileStream } from '../../services/IFileStream';
+import { Types } from '../../Types';
+import { IResponseFactory } from './IResponseFactory';
 
 @injectable()
 export class ResponseFactory implements IResponseFactory {
@@ -22,7 +22,7 @@ export class ResponseFactory implements IResponseFactory {
         switch (error.constructor) {
             case multer.MulterError:
             case InvalidImageError:
-                res.render(Pages.ServerError, { errorMessage: 'Invalid image provided'});
+                res.render(Pages.ServerError, {errorMessage: 'Invalid image provided'});
                 break;
             case FileNotFoundError:
                 res.status(404).send('File not found');
@@ -34,7 +34,7 @@ export class ResponseFactory implements IResponseFactory {
     }
 
     public sendStreamResponse(res: Response, fileStream: IFileStream): void {
-        const { stream } = fileStream;
+        const {stream} = fileStream;
         const parsedFileName = path.parse(fileStream.fileName);
         const headers = {
             'Content-Type': ALLOWED_IMAGE_TYPES.find((imageType: IAllowedImageType) => imageType.extension === parsedFileName.ext)?.mimeType ?? '',
