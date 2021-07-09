@@ -2,6 +2,7 @@ import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { ILogger } from './ILogger';
 
+// tslint:disable-next-line:no-var-requires
 const pinoLogger = require('pino')({
     prettyPrint: { colorize: true },
 });

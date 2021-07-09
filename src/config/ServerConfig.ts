@@ -1,26 +1,37 @@
+import { inject, injectable } from 'inversify';
 import { ILogger } from '../logger/ILogger';
+import {Types} from '../Types';
+import {StorageConfig} from './StorageConfig';
 
+@injectable()
 export class ServerConfig {
-    private _port: number = 8080;
-    private _databaseConnectionString: string = 'connectionstring';
+    private _port: number = 8082;
+    private _apiPath: string = 'http://localhost:8082';
     private logger: ILogger;
+    private _storageConfig: StorageConfig;
 
     public get port(): number {
         return this._port;
     }
 
-    public get databaseConnectionString(): string {
-        return this._databaseConnectionString;
+    public get apiPath(): string {
+        return this._apiPath;
     }
 
-    constructor(logger: ILogger) {
+    public get storageConfig(): StorageConfig {
+        return this._storageConfig;
+    }
+
+    constructor(@inject(Types.Logger) logger: ILogger) {
         this.logger = logger;
+        this._storageConfig = new StorageConfig(logger);
     }
 
     public serialize(): any {
         return {
             port: this.port,
-            databaseConnectionString: this.databaseConnectionString,
+            storageConfig: this._storageConfig.serialize(),
+            apiPath: this.apiPath,
         };
     }
 
@@ -35,15 +46,16 @@ export class ServerConfig {
             );
         }
 
-        if (config.databaseConnectionString && typeof config.databaseConnectionString === 'string') {
-            this._databaseConnectionString = config.databaseConnectionString;
+        if (typeof config.apiPath === 'string' ) {
+            this._apiPath = config.apiPath;
         } else {
             this.logger.info(
-                'ServerConfig',
+                'StorageConfig',
                 'deserialize',
-                `Invalid connection string value ${config.databaseConnectionString},
-                 using default value ${this.databaseConnectionString}`,
+                `Invalid api path path ${config.apiPath}, using default value`,
             );
         }
+
+        this._storageConfig.deserialize(config.storageConfig);
     }
 }
