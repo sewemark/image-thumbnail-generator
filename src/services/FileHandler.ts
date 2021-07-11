@@ -8,7 +8,6 @@ import { ALLOWED_IMAGE_TYPES, IAllowedImageType } from './AlloweImageTypes';
 import { IFileStream } from './IFileStream';
 import { IFileStorage } from './IReadableFileStorage';
 import { IThumbnailGenerator } from './IThumbnailGenerator';
-import { THUMBNAIL_EXTENSION } from "./SharpThumbnailGenerator";
 
 @injectable()
 export class FileHandler implements IFileControllerAdapter {
@@ -21,34 +20,28 @@ export class FileHandler implements IFileControllerAdapter {
 
     public async getFileStream(fileName: string): Promise<IFileStream> {
         const stream = await this.fileStorage.getReadStream(fileName);
-        if(!stream) {
+        if (!stream) {
             throw new FileNotFoundError(`File with ${fileName} was not found`);
         }
+        const fileExtension = path.parse(fileName).ext;
         return {
             stream,
             fileName,
-            mimeType: ALLOWED_IMAGE_TYPES.find((allowedType: IAllowedImageType) => allowedType.extension === path.parse(fileName).ext)?.mimeType
-                ?? '',
+            mimeType: ALLOWED_IMAGE_TYPES.find((allowedType: IAllowedImageType) => allowedType.extension === fileExtension)?.mimeType ?? '',
         };
     }
 
     public async generateThumbnails(fileName: string): Promise<void> {
         const readFileStream = await this.fileStorage.getReadStream(fileName);
-        if(!readFileStream) {
+        if (!readFileStream) {
             throw new FileNotFoundError(`File with ${fileName} was not found, cannot generate thumbnails`);
         }
         const sizes = [200, 300, 400];
+        const parsedFileName = path.parse(fileName);
         const promises = sizes.map(async (size: number) => {
-            const parsedFileName = path.parse(fileName);
-            const thumbnailFileName = `${parsedFileName.name}.name_${size}_x${size}.${THUMBNAIL_EXTENSION}`;
+            const thumbnailFileName = `${parsedFileName.name}.name_${size}_x${size}.${this.thumbnailGenerator.getThumbnailExtension()}`;
             const writeFileStream = await this.fileStorage.getWriteStream(thumbnailFileName);
-            await this.thumbnailGenerator.generate(
-                readFileStream,
-                writeFileStream, {
-                    width: size,
-                    height: size,
-                    originalFileName: fileName,
-                });
+            await this.thumbnailGenerator.generate(readFileStream, writeFileStream, {width: size, height: size});
         });
         await Promise.all(promises);
     }

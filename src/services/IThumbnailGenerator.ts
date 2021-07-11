@@ -3,4 +3,5 @@ import { IThumbnailOptions } from './IThumbnailOptions';
 
 export interface IThumbnailGenerator {
     generate(readableFileStream: ReadStream, writableStream: WriteStream, options: IThumbnailOptions): Promise<string>;
+    getThumbnailExtension(): string;
 }

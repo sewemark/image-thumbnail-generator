@@ -35,6 +35,6 @@ import { ExpressAppDecorator } from './ExpressAppDecorator';
         );
         server.start();
     } catch (err) {
-        console.log('Error occured ' + err.stack);
+        console.log('Error occurred ' + err.stack);
     }
 })();
